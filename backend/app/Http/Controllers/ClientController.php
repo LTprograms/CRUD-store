@@ -29,7 +29,8 @@ class ClientController extends Controller
         $client = new Client();
         $client->name = $request->name;
         $client->surname = $request->surname;
-        $client->birth = $request->birth;
+        // $client->birth = $request->birth;
+        $client->birth = '1990-12-11';
         $client->phone = $request->phone;
         $client->save();
         return $client;

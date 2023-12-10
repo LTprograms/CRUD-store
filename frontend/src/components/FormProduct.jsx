@@ -1,25 +1,29 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-const url = "http://192.168.1.17:8000";
+// const url = "http://192.168.1.17:8000";
+const url = "http://localhost:8000";
 
-export default function FormClient({ setModal, clients, setClients, clientEdit, setClientEdit }) {
-  const { handleSubmit, register, formState: { errors } } = useForm({defaultValues: clientEdit});
+
+export default function FormProduct({ setModal, products, setProducts, productEdit, setProductEdit }) {
+  const { handleSubmit, register, formState: { errors } } = useForm({defaultValues: productEdit});
 
   const onSubmit = (data) => {
-    data.created_at = new Date();
-    data.updated_at = new Date();
+    data.price = parseFloat(data.price);
+    data.stock = parseInt(data.stock);
     const api = async () => {
-        if (Object.keys(clientEdit).length!==0) {
-            const dataApi = await axios.put(`${url}/client/${clientEdit.id}`, data);            
+        if (Object.keys(productEdit).length!==0) {
+            const dataApi = await axios.put(`${url}/products/${productEdit.id}`, data);            
+            console.log(dataApi)
         } else {
-            const dataApi = await axios.post(`${url}/client`, data);
+            const dataApi = await axios.post(`${url}/product`, data);
+            console.log(dataApi)
         }
         //setClients([...clients, data]);
     }
     api();
     setModal(false);
-    setClientEdit({});
+    setProductEdit({});
   };
 
   return (
@@ -27,7 +31,7 @@ export default function FormClient({ setModal, clients, setClients, clientEdit, 
       <div className="flex justify-end">
         <button
           className="text-white font-bold text-5xl hover:text-gray-100"
-          onClick={() => {setModal(false); setClientEdit({})}}
+          onClick={() => {setModal(false); setProductEdit({})}}
         >
           x
         </button>
@@ -55,45 +59,46 @@ export default function FormClient({ setModal, clients, setClients, clientEdit, 
 
           <div className="mb-4">
             <label className="block text-white text-sm font-bold mb-2">
-              Surname
+              Description
             </label>
             <input
-              {...register("surname", { required: "Surname is required" })}
+              {...register("description", { required: "Description is required" })}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
-              placeholder="Enter your surname"
+              placeholder="Enter your descrpition"
             />
-            {errors.name && (
-              <p className="text-red-500 text-xs italic">{errors.surname.message}</p>
+            {errors.descripton && (
+              <p className="text-red-500 text-xs italic">{errors.descripton.message}</p>
             )}
           </div>
 
           <div className="mb-4">
             <label className="block text-white text-sm font-bold mb-2">
-              Birth
+              Price
             </label>
             <input
-              {...register("birth", { required: "Birth is required" })}
+              {...register("price", { required: "Price is required" })}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="date"
+              type="number"
+              placeholder="Enter price"
             />
-            {errors.name && (
-              <p className="text-red-500 text-xs italic">{errors.birth.message}</p>
+            {errors.price && (
+              <p className="text-red-500 text-xs italic">{errors.price.message}</p>
             )}
           </div>
 
           <div className="mb-4">
             <label className="block text-white text-sm font-bold mb-2">
-              Phone Number
+              Stock
             </label>
             <input
-              {...register("phone", { required: "Phone number is required"})}
+              {...register("stock", { required: "Stock is required"})}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-              placeholder="Enter your phone number"
+              type="number"
+              placeholder="Enter your stock"
             />
-            {errors.name && (
-              <p className="text-red-500 text-xs italic">{errors.phone.message}</p>
+            {errors.stock && (
+              <p className="text-red-500 text-xs italic">{errors.stock.message}</p>
             )}
           </div>
 
